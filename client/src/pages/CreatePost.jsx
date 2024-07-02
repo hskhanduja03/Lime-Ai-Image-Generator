@@ -22,7 +22,7 @@ function CreatePost() {
       try {
         setLoading(true);
   
-        const response = await fetch("http://localhost:3000/api/v1/post", {
+        const response = await fetch("https://lime-ai-image-generator.onrender.com/api/v1/post", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -46,7 +46,7 @@ function CreatePost() {
       try {
         setGenerating(true);
   
-        const response = await fetch("http://localhost:3000/proxy", {
+        const response = await fetch("https://lime-ai-image-generator.onrender.com/proxy", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
