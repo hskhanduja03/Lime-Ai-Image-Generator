@@ -7,9 +7,15 @@ function Home() {
   const [showPhoto, setshowPhoto] = useState(false);
   const [allPosts, setAllPosts] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [photoUrl, setphotoUrl] = useState("");
   const handleClick = (url) => {
     setshowPhoto(url);
+    setphotoUrl(showPhoto);
   };
+
+  useEffect(()=>{
+    setphotoUrl(showPhoto)
+  }, [showPhoto, setshowPhoto])
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -69,7 +75,7 @@ function Home() {
         >
           <div className="bg-white w-1/2 h-3/4 mt-14 rounded-lg overflow-hidden relative">
             <img
-              src={showPhoto}
+              src={photoUrl}
               className="w-full h-full object-cover"
               alt=""
               srcset=""
