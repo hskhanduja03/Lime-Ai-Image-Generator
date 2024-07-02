@@ -24,7 +24,7 @@ function CreatePost() {
       try {
         setSharing(true);
         const response = await fetch(
-          "https://lime-ai-image-generator.onrender.com/api/v1/post",
+          "http://localhost:3000/api/v1/post",
           {
             method: "POST",
             headers: {
@@ -53,7 +53,7 @@ function CreatePost() {
         setGenerating(true);
 
         const response = await fetch(
-          "https://lime-ai-image-generator.onrender.com/proxy",
+          "http://localhost:3000/proxy",
           {
             method: "POST",
             headers: {

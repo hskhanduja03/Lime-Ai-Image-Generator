@@ -23,7 +23,7 @@ function Home() {
 
       try {
         const response = await fetch(
-          "https://lime-ai-image-generator.onrender.com/api/v1/post",
+          "http://localhost:3000/api/v1/post",
           {
             method: "GET",
             headers: {
