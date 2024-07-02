@@ -51,7 +51,7 @@ app.post("/proxy", async (req, res) => {
 const connectServer = async () => {
   try {
     await connectDb(process.env.MONGO_URL);
-    app.listen(3000, () => {
+    app.listen(process.env.PORT, () => {
       console.log("Server started on port 3000");
     });
   } catch (error) {
