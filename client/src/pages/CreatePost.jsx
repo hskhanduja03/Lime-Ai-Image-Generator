@@ -4,6 +4,7 @@ import { preview } from "../assets";
 import { FormField, Loader } from "../components";
 import { getRandomPrompt } from "../utils";
 import ShiningButton from "../ShiningButton";
+import ModernLoader from "../components/ModernLoader";
 
 function CreatePost() {
   const Navigate = useNavigate();
@@ -14,30 +15,35 @@ function CreatePost() {
   });
   const [generating, setGenerating] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
-  const handleSubmit = async(e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     if (form.prompt && form.photo) {
       try {
-        setLoading(true);
-  
-        const response = await fetch("https://lime-ai-image-generator.onrender.com/api/v1/post", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        });
+        setSharing(true);
+        const response = await fetch(
+          "https://lime-ai-image-generator.onrender.com/api/v1/post",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(form),
+          }
+        );
         await response.json();
-        Navigate('/')
-        setGenerating(false);
+        Navigate("/");
+        
+
       } catch (error) {
         console.log(error);
+      } finally {
+        setSharing(false);
       }
-      finally{
-        setLoading(false);
-      }
+    }else{
+      alert("Please Generate an image first")
     }
   };
 
@@ -45,17 +51,20 @@ function CreatePost() {
     if (form.prompt) {
       try {
         setGenerating(true);
-  
-        const response = await fetch("https://lime-ai-image-generator.onrender.com/proxy", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt: form.prompt,
-            aspect_ratio: "1:1"
-          }),
-        });
+
+        const response = await fetch(
+          "https://lime-ai-image-generator.onrender.com/proxy",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              prompt: form.prompt,
+              aspect_ratio: "1:1",
+            }),
+          }
+        );
         const data = await response.json();
         if (response.ok) {
           setForm({ ...form, photo: data.data[0].asset_url });
@@ -69,8 +78,6 @@ function CreatePost() {
       }
     }
   };
-  
-  
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -82,7 +89,7 @@ function CreatePost() {
   };
 
   return (
-    <section className="max-w-7xl mx-auto">
+    <section className="max-w-3xl mx-auto">
       <div>
         <h1 className="font-extrabold text-2xl">Create</h1>
         <p className="text-sm text-gray-400 font-light mt-2">
@@ -90,6 +97,7 @@ function CreatePost() {
           AI and share them with community
         </p>
       </div>
+
       <form className="max-w-3xl mt-5" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           <FormField
@@ -111,7 +119,14 @@ function CreatePost() {
             handleSurpriseMe={handleSurpriseMe}
           />
 
-          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-52 h-52 p-3 flex justify-center items-center overflow-hidden">
+          {sharing && (
+            <div className="flex flex-col gap-3 text-white items-center min-h z-10 screen h-full justify-center absolute inset-0 bg-gray-500 bg-opacity-60">
+              <ModernLoader />
+              <p>Sharing with Community...</p>
+            </div>
+          )}
+
+          <div className="z-50 relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-52 h-52 p-3 flex justify-center items-center overflow-hidden">
             {form.photo ? (
               <img
                 src={form.photo}
@@ -122,7 +137,7 @@ function CreatePost() {
               <img
                 src={preview}
                 alt="generating img..."
-                className="opacity-40 object-contain w-9/12 h-9/12"
+                className="opacity-40 object-contain w-9/12 h-9/12 "
               />
             )}
             {generating && (
@@ -145,9 +160,12 @@ function CreatePost() {
           </p>
         </div>
 
-        <button className="bg-green-500 p-2 rounded-md w-full text-white" type="submit">
-            Share with community
-          </button>
+        <button
+          className="bg-green-500 p-2 rounded-md w-full text-white"
+          type="submit"
+        >
+          Share with community
+        </button>
       </form>
     </section>
   );
