@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <header className="w-full px-4 sm:px-4 py-4 flex justify-between items-center bg-white border-b-[#e6ebf4]">
         <Link to={"/"}>
-          <img src={logo} className="w-28 object-contain" alt="logo" />
+          <img src={logo2} className="w-28 object-contain" alt="logo" />
         </Link>
 
         <Link
